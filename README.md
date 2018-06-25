@@ -1,2 +1,2 @@
 # cloud-agent
-Agent for cloud, it include operating docker and vm.
+Agent for cloud, it includes operating docker and vm.
