@@ -1,0 +1,45 @@
+global
+        pidfile /var/run/haproxy.pid
+        daemon
+        user root
+        group root
+        stats socket /tmp/haproxy.socket user nobody group nobody mode 600 level admin
+        node NODE_NAME
+        description NODE_DESC
+
+
+                spread-checks 3
+        quiet
+defaults
+        log global
+        mode http
+        retries 3
+        option redispatch
+        maxconn 5000
+        contimeout 9000000
+        clitimeout 90000000
+        srvtimeout 90000000
+
+listen  admin_status
+        bind 0.0.0.0:81         
+        mode http               
+        log 127.0.0.1 local3 err  
+        stats refresh 30s         
+        stats uri  /haproxy-stats  
+        stats realm  Frank \Frank 
+        stats auth admin:admin123qwe    
+        stats auth  Frank:Frank 
+        stats hide-version       
+        stats  admin if TRUE
+
+frontend 123
+        bind *:88  ssl crt null/null
+        mode HTTPS
+                        acl c333 sdfadfadfasdf
+                        use_backend 111 c333
+                default_backend 111
+backend 111
+        balance static-rr
+                server ??-5fe18d3e5dec43af9f6df14c7e30f806 123.123.2.1:8080 check maxconn 300  weight 1 inter 2000 rise 2 fall 3
+        
+		
